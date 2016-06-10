@@ -231,24 +231,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.TipoContratoListaServicoParaBus(client.TodosContratos().ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.TipoContratoModel> ListContratoDAO = DAO.TipoContrato.TodosContratos();
-            List<TipoContrato> listContrato = new List<TipoContrato>();
-            foreach (var item in ListContratoDAO)
-            {
-                TipoContrato tipoContrato = new TipoContrato();
-                tipoContrato.TipoContratoID = item.TipoContratoID;
-                tipoContrato.TipoContratoString = item.TipoContratoString;
-                listContrato.Add(tipoContrato);
-            }
-            return listContrato;
         }
 
         //----------------------------Distribuidora--------------------------------------------------------
@@ -259,24 +248,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.CadastrarDistribuidora(Conversor.DistribuidoraBusParaServico(_Distribuidora));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.DistribuidoraModel _DistribuidoraDAO = new DAO.Models.DistribuidoraModel();
-            _DistribuidoraDAO.DistribuidoraID = _Distribuidora.DistribuidoraID;
-            _DistribuidoraDAO.Nome = _Distribuidora.Nome;
-            _DistribuidoraDAO.Cnpj = _Distribuidora.Cnpj;
-
-            if (DAO.Distribuidora.CadastrarDistribuidora(_DistribuidoraDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }

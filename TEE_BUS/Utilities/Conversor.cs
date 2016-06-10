@@ -132,6 +132,8 @@ namespace TEE_BUS.Utilities
 
             if (contratoBUS != null)
             {
+                contratoServico = new TEEService.TipoContrato();
+
                 contratoServico.TipoContratoID = contratoBUS.TipoContratoID;
                 contratoServico.TipoContratoString = contratoBUS.TipoContratoString;
             }
@@ -145,6 +147,8 @@ namespace TEE_BUS.Utilities
 
             if (contratoServico != null)
             {
+                contratoBUS = new TipoContrato();
+
                 contratoBUS.TipoContratoID = contratoServico.TipoContratoID;
                 contratoBUS.TipoContratoString = contratoServico.TipoContratoString;
             }
@@ -156,5 +160,21 @@ namespace TEE_BUS.Utilities
         {
             return new List<TipoContrato>(contratosServico.Select(c => TipoContratoServicoParaBus(c)));
         }
+    }
+
+    //----------------------------------------DISTRIBUIDORA----------------------------------------------
+
+    internal static TEEService.Distribuidora DistribuidoraBusParaServico(Distribuidora distribuidoraBUS)
+    {
+        TEEService.Distribuidora distribuidoraService = null;
+
+        if(distribuidoraBUS != null)
+        {
+            distribuidoraService.Cnpj = distribuidoraBUS.Cnpj;
+            distribuidoraService.DistribuidoraID = distribuidoraBUS.DistribuidoraID;
+            distribuidoraService.Nome = distribuidoraBUS.Nome;
+        }
+
+        return distribuidoraService;
     }
 }
