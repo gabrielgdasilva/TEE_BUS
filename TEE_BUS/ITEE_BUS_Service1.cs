@@ -5,136 +5,139 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using TEE_BUS.DataContracts;
 
 namespace TEE_BUS
 {
     //----------------------------Bandeira-------------------------------------------------------------
-    [OperationContract]
-    Bandeira DetalhesBandeira(int id);
+    [ServiceContract]
+    public interface ITEE_BUS_Service1
+    {
+        [OperationContract]
+        Bandeira DetalhesBandeira(int id);
 
-    [OperationContract]
-    bool CadastrarBandeira(Bandeira bandeira);
+        [OperationContract]
+        bool CadastrarBandeira(Bandeira bandeira);
 
-    [OperationContract]
-    List<Bandeira> TodasBandeiras();
+        [OperationContract]
+        List<Bandeira> TodasBandeiras();
 
-    //----------------------------Cliente--------------------------------------------------------------
-    [OperationContract]
-    Cliente DetalhesCliente(int id);
+        //----------------------------Cliente--------------------------------------------------------------
+        [OperationContract]
+        Cliente DetalhesCliente(int id);
 
-    [OperationContract]
-    bool CadastrarCliente(Cliente cliente);
+        [OperationContract]
+        bool CadastrarCliente(Cliente cliente);
 
-    [OperationContract]
-    bool AtualizarCliente(Cliente cliente);
+        [OperationContract]
+        bool AtualizarCliente(Cliente cliente);
 
-    //----------------------------Fabrica--------------------------------------------------------------
-    [OperationContract]
-    bool CadastrarFabrica(Fabrica _fabrica);
+        //----------------------------Fabrica--------------------------------------------------------------
+        [OperationContract]
+        bool CadastrarFabrica(Fabrica _fabrica);
 
-    [OperationContract]
-    Fabrica DestalhesDaFabrica(int id);
+        [OperationContract]
+        Fabrica DestalhesDaFabrica(int id);
 
-    [OperationContract]
-    List<Fabrica> TodasFabricas(int ClienteID);
+        [OperationContract]
+        List<Fabrica> TodasFabricas(int ClienteID);
 
-    [OperationContract]
-    bool DeletarFabrica(Fabrica _fabrica);
+        [OperationContract]
+        bool DeletarFabrica(Fabrica _fabrica);
 
-    [OperationContract]
-    bool AtualizarFabrica(Fabrica _fabrica);
+        [OperationContract]
+        bool AtualizarFabrica(Fabrica _fabrica);
 
-    //----------------------------Tipo de Contrato-----------------------------------------------------
-    [OperationContract]
-    bool CadastrarContrato(TipoContrato _TipoContrato);
+        //----------------------------Tipo de Contrato-----------------------------------------------------
+        [OperationContract]
+        bool CadastrarContrato(TipoContrato _TipoContrato);
 
-    [OperationContract]
-    TipoContrato DetalhesContrato(int id);
+        [OperationContract]
+        TipoContrato DetalhesContrato(int id);
 
-    [OperationContract]
-    List<TipoContrato> TodosContratos();
+        [OperationContract]
+        List<TipoContrato> TodosContratos();
 
-    //----------------------------Distribuidora--------------------------------------------------------
-    [OperationContract]
-    bool CadastrarDistribuidora(Distribuidora _Distribuidora);
+        //----------------------------Distribuidora--------------------------------------------------------
+        [OperationContract]
+        bool CadastrarDistribuidora(Distribuidora _Distribuidora);
 
-    [OperationContract]
-    Distribuidora DetalhesDistribuidora(int id);
+        [OperationContract]
+        Distribuidora DetalhesDistribuidora(int id);
 
-    [OperationContract]
-    List<Distribuidora> TodasDistribuidoras();
+        [OperationContract]
+        List<Distribuidora> TodasDistribuidoras();
 
-    //----------------------------Tipo de SubGrupo-----------------------------------------------------
-    [OperationContract]
-    bool CadastrarSubGrupo(TipoSubGrupo _SubGrupo);
+        //----------------------------Tipo de SubGrupo-----------------------------------------------------
+        [OperationContract]
+        bool CadastrarSubGrupo(TipoSubGrupo _SubGrupo);
 
-    [OperationContract]
-    TipoSubGrupo DetalhesSubGrupo(int id);
+        [OperationContract]
+        TipoSubGrupo DetalhesSubGrupo(int id);
 
-    [OperationContract]
-    List<TipoSubGrupo> TodosSubGrupos();
+        [OperationContract]
+        List<TipoSubGrupo> TodosSubGrupos();
 
-    //----------------------------Tarifa---------------------------------------------------------------
-    [OperationContract]
-    bool CadastrarTarifa(Tarifa _Tarifa);
+        //----------------------------Tarifa---------------------------------------------------------------
+        [OperationContract]
+        bool CadastrarTarifa(Tarifa _Tarifa);
 
-    [OperationContract]
-    Tarifa DestalhesDaTarifa(int id);
+        [OperationContract]
+        Tarifa DestalhesDaTarifa(int id);
 
-    [OperationContract]
-    List<Tarifa> TodasTarifas();
+        [OperationContract]
+        List<Tarifa> TodasTarifas();
 
-    [OperationContract]
-    bool AtualizarTarifa(Tarifa _Tarifa);
+        [OperationContract]
+        bool AtualizarTarifa(Tarifa _Tarifa);
 
-    [OperationContract]
-    bool DeletarTarifa(Tarifa _Tarifa);
+        [OperationContract]
+        bool DeletarTarifa(Tarifa _Tarifa);
 
-    //----------------------------Usuario---------------------------------------------------------------
-    [OperationContract]
-    bool CadastrarUsuario(Usuario _Usuario);
+        //----------------------------Usuario---------------------------------------------------------------
+        [OperationContract]
+        bool CadastrarUsuario(Usuario _Usuario);
 
-    [OperationContract]
-    Usuario DestalhesDoUsuario(string email);
+        [OperationContract]
+        Usuario DestalhesDoUsuario(string email);
 
-    [OperationContract]
-    Usuario VerificaAutenticacao(string email, string senha);
+        [OperationContract]
+        Usuario VerificaAutenticacao(string email, string senha);
 
-    [OperationContract]
-    bool AtualizarUsuario(Usuario _Usuario);
+        [OperationContract]
+        bool AtualizarUsuario(Usuario _Usuario);
 
-    [OperationContract]
-    bool DeletarUsuario(Usuario _Usuario);
+        [OperationContract]
+        bool DeletarUsuario(Usuario _Usuario);
 
-    [OperationContract]
-    List<Usuario> ListarUsuarios(int ClienteID);
+        [OperationContract]
+        List<Usuario> ListarUsuarios(int ClienteID);
 
-    //----------------------------Contas----------------------------------------------------------------
-    [OperationContract]
-    bool CadastrarConta(Conta _Conta);
+        //----------------------------Contas----------------------------------------------------------------
+        [OperationContract]
+        bool CadastrarConta(Conta _Conta);
 
-    [OperationContract]
-    Conta DestalhesDaConta(DateTime dataReferencia, int FabricaID);
+        [OperationContract]
+        Conta DestalhesDaConta(DateTime dataReferencia, int FabricaID);
 
-    [OperationContract]
-    List<Conta> TodasContas(int FabricaID);
+        [OperationContract]
+        List<Conta> TodasContas(int FabricaID);
 
-    [OperationContract]
-    List<Conta> ConsultaEntreDatas(DateTime dataReferencia1, DateTime dataReferencia2, int FabricaID);
+        [OperationContract]
+        List<Conta> ConsultaEntreDatas(DateTime dataReferencia1, DateTime dataReferencia2, int FabricaID);
 
-    [OperationContract]
-    bool AtualizarConta(Conta _Conta);
+        [OperationContract]
+        bool AtualizarConta(Conta _Conta);
 
-    [OperationContract]
-    bool DeletarConta(Conta _Conta);
+        [OperationContract]
+        bool DeletarConta(Conta _Conta);
 
-    //----------------------------Simulacao----------------------------------------------------------------
-    [OperationContract]
-    bool GerarSimulacao(int fabricaID);
+        //----------------------------Simulacao----------------------------------------------------------------
+        [OperationContract]
+        bool GerarSimulacao(int fabricaID);
 
-    //----------------------------Grafico------------------------------------------------------------------
-    [OperationContract]
-    List<Grafico> DadosParaGrafico(int FabricaID);
-
-
+        //----------------------------Grafico------------------------------------------------------------------
+        [OperationContract]
+        List<Grafico> DadosParaGrafico(int FabricaID);
+    }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e898c846-0345-4ae1-87a6-4d78b84eb012" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://teeservice.azurewebsites.net/TEECRUDService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="TEECRUDService.xsd" MetadataType="Schema" ID="782e4cbd-c8cc-4ef0-8736-9a983ce7591e" SourceId="1" SourceUrl="http://teeservice.azurewebsites.net/TEECRUDService.svc?xsd=xsd1" />
+    <MetadataFile FileName="TEECRUDService1.xsd" MetadataType="Schema" ID="e7960f4c-5949-47c4-945b-2e1962daaa7d" SourceId="1" SourceUrl="http://teeservice.azurewebsites.net/TEECRUDService.svc?xsd=xsd2" />
+    <MetadataFile FileName="TEECRUDService.disco" MetadataType="Disco" ID="8ce887c1-c7e3-4aca-a611-ec0488255f57" SourceId="1" SourceUrl="http://teeservice.azurewebsites.net/TEECRUDService.svc?disco" />
+    <MetadataFile FileName="TEECRUDService2.xsd" MetadataType="Schema" ID="4a7f3003-c624-44e2-a17b-f0194a66c394" SourceId="1" SourceUrl="http://teeservice.azurewebsites.net/TEECRUDService.svc?xsd=xsd0" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="2c773512-925c-4286-8429-d5b1d6580ed3" SourceId="1" SourceUrl="http://teeservice.azurewebsites.net/TEECRUDService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

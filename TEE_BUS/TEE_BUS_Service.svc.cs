@@ -5,6 +5,8 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using TEE_BUS.DataContracts;
+using TEE_BUS.Utilities;
 
 namespace TEE_BUS
 {
@@ -12,31 +14,34 @@ namespace TEE_BUS
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : ITEE_BUS_Service1
     {
-
         //----------------------------Bandeira-------------------------------------------
         [OperationBehavior]
         public Bandeira DetalhesBandeira(int id)
         {
-            DAO.Models.BandeiraModel _BandeiraDAO = DAO.Bandeira.DetalhesBandeira(id);
-            Bandeira bandeira = new Bandeira();
-            bandeira.BandeiraID = _BandeiraDAO.BandeiraID;
-            bandeira.BandeiraString = _BandeiraDAO.BandeiraString;
-
-            return bandeira;
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.BandeiraServicoParaBus(client.DetalhesBandeira(id));
+                }
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
 
         [OperationBehavior]
         public bool CadastrarBandeira(Bandeira bandeira)
         {
-            DAO.Models.BandeiraModel _Bandeira = new DAO.Models.BandeiraModel();
-            _Bandeira.BandeiraID = bandeira.BandeiraID;
-            _Bandeira.BandeiraString = bandeira.BandeiraString;
-
-            if (DAO.Bandeira.CadastrarBandeira(_Bandeira))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -45,48 +50,46 @@ namespace TEE_BUS
         [OperationBehavior]
         public List<Bandeira> TodasBandeiras()
         {
-            List<DAO.Models.BandeiraModel> ListBandeiraDAO = DAO.Bandeira.TodasBandeiras();
-            List<Bandeira> listBandeira = new List<Bandeira>();
-            foreach (var item in ListBandeiraDAO)
+            try
             {
-                Bandeira bandeira = new Bandeira();
-                bandeira.BandeiraID = item.BandeiraID;
-                bandeira.BandeiraString = item.BandeiraString;
-                listBandeira.Add(bandeira);
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.BandeiraListaServicoParaBus(client.TodasBandeiras().ToList());
+                }
             }
-            return listBandeira;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         //----------------------------Cliente---------------------------------------------------
         [OperationBehavior]
         public Cliente DetalhesCliente(int id)
         {
-            DAO.Models.ClienteModel _clienteDAO = DAO.Cliente.DetalhesCliente(id);
-            Cliente cliente = new Cliente();
-            cliente.ClienteID = _clienteDAO.ClienteID;
-            cliente.Nome = _clienteDAO.Nome;
-            cliente.Cnpj = _clienteDAO.Cnpj;
-            cliente.RazaoSocial = _clienteDAO.RazaoSocial;
-            cliente.Endereco = _clienteDAO.Endereco;
-
-            return cliente;
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.ClienteServicoParaBus(client.DetalhesCliente(id));
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [OperationBehavior]
         public bool CadastrarCliente(Cliente _cliente)
         {
-            DAO.Models.ClienteModel clienteDAO = new DAO.Models.ClienteModel();
-            clienteDAO.ClienteID = _cliente.ClienteID;
-            clienteDAO.Nome = _cliente.Nome;
-            clienteDAO.Cnpj = _cliente.Cnpj;
-            clienteDAO.RazaoSocial = _cliente.RazaoSocial;
-            clienteDAO.Endereco = _cliente.Endereco;
-
-
-            if (DAO.Cliente.CadastrarCliente(clienteDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarCliente(Conversor.ClienteBusParaServico(_cliente));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -95,19 +98,14 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool AtualizarCliente(Cliente _cliente)
         {
-            DAO.Models.ClienteModel clienteDAO = new DAO.Models.ClienteModel();
-            clienteDAO.ClienteID = _cliente.ClienteID;
-            clienteDAO.Nome = _cliente.Nome;
-            clienteDAO.Cnpj = _cliente.Cnpj;
-            clienteDAO.RazaoSocial = _cliente.RazaoSocial;
-            clienteDAO.Endereco = _cliente.Endereco;
-
-
-            if (DAO.Cliente.AtualizarCliente(clienteDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.AtualizarCliente(Conversor.ClienteBusParaServico(_cliente));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -116,18 +114,14 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool CadastrarFabrica(Fabrica _fabrica)
         {
-            DAO.Models.FabricaModel fabricaDAO = new DAO.Models.FabricaModel();
-            fabricaDAO.FabricaID = _fabrica.FabricaID;
-            fabricaDAO.ClienteID = _fabrica.ClienteID;
-            fabricaDAO.Cnpj = _fabrica.Cnpj;
-            fabricaDAO.Endereco = _fabrica.Endereco;
-            fabricaDAO.DistribuidoraID = _fabrica.DistribuidoraID;
-
-            if (DAO.Fabrica.CadastrarFabrica(fabricaDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarFabrica(Conversor.FabricaBusParaServico(_fabrica));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -136,18 +130,14 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool AtualizarFabrica(Fabrica _fabrica)
         {
-            DAO.Models.FabricaModel fabricaDAO = new DAO.Models.FabricaModel();
-            fabricaDAO.FabricaID = _fabrica.FabricaID;
-            fabricaDAO.ClienteID = _fabrica.ClienteID;
-            fabricaDAO.Cnpj = _fabrica.Cnpj;
-            fabricaDAO.Endereco = _fabrica.Endereco;
-            fabricaDAO.DistribuidoraID = _fabrica.DistribuidoraID;
-
-            if (DAO.Fabrica.CadastrarFabrica(fabricaDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.AtualizarFabrica(Conversor.FabricaBusParaServico(_fabrica));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -156,50 +146,46 @@ namespace TEE_BUS
         [OperationBehavior]
         public Fabrica DestalhesDaFabrica(int id)
         {
-            DAO.Models.FabricaModel _FabricaDAO = DAO.Fabrica.DestalhesDaFabrica(id);
-            Fabrica fabrica = new Fabrica();
-            fabrica.FabricaID = _FabricaDAO.FabricaID;
-            fabrica.ClienteID = _FabricaDAO.ClienteID;
-            fabrica.Cnpj = _FabricaDAO.Cnpj;
-            fabrica.Endereco = _FabricaDAO.Endereco;
-            fabrica.DistribuidoraID = _FabricaDAO.DistribuidoraID;
-
-            return fabrica;
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.FabricaServicoParaBus(client.DestalhesDaFabrica(id));
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [OperationBehavior]
         public List<Fabrica> TodasFabricas(int ClienteID)
         {
-            List<DAO.Models.FabricaModel> ListFabricaDAO = DAO.Fabrica.TodasFabricas(ClienteID);
-            List<Fabrica> listaFabricas = new List<Fabrica>();
-            foreach (var item in ListFabricaDAO)
+            try
             {
-                Fabrica fabrica = new Fabrica();
-                fabrica.FabricaID = item.FabricaID;
-                fabrica.ClienteID = item.ClienteID;
-                fabrica.Cnpj = item.Cnpj;
-                fabrica.Endereco = item.Endereco;
-                fabrica.DistribuidoraID = item.DistribuidoraID;
-                listaFabricas.Add(fabrica);
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.FabricaListaServicoParaBus(new TEEService.TEECRUDServiceClient().TodasFabricas(ClienteID).ToList());
+                }
             }
-            return listaFabricas;
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
         //Deleção de Fabrica
         [OperationBehavior]
         public bool DeletarFabrica(Fabrica _fabrica)
         {
-            DAO.Models.FabricaModel fabricaDAO = new DAO.Models.FabricaModel();
-            fabricaDAO.FabricaID = _fabrica.FabricaID;
-            fabricaDAO.ClienteID = _fabrica.ClienteID;
-            fabricaDAO.Cnpj = _fabrica.Cnpj;
-            fabricaDAO.Endereco = _fabrica.Endereco;
-            fabricaDAO.DistribuidoraID = _fabrica.DistribuidoraID;
-
-            if (DAO.Fabrica.DeletarFabrica(fabricaDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.DeletarFabrica(Conversor.FabricaBusParaServico(_fabrica));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -209,15 +195,14 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool CadastrarContrato(TipoContrato _TipoContrato)
         {
-            DAO.Models.TipoContratoModel _ContratoDAO = new DAO.Models.TipoContratoModel();
-            _ContratoDAO.TipoContratoID = _TipoContrato.TipoContratoID;
-            _ContratoDAO.TipoContratoString = _TipoContrato.TipoContratoString;
-
-            if (DAO.TipoContrato.CadastrarContrato(_ContratoDAO))
+            try
             {
-                return true;
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarContrato(Conversor.TipoContratoBusParaServico(_TipoContrato));
+                }
             }
-            else
+            catch (Exception ex)
             {
                 return false;
             }
@@ -226,17 +211,34 @@ namespace TEE_BUS
         [OperationBehavior]
         public TipoContrato DetalhesContrato(int id)
         {
-            DAO.Models.TipoContratoModel _ContratoDAO = DAO.TipoContrato.DetalhesContrato(id);
-            TipoContrato tipoContrato = new TipoContrato();
-            tipoContrato.TipoContratoID = _ContratoDAO.TipoContratoID;
-            tipoContrato.TipoContratoString = _ContratoDAO.TipoContratoString;
-
-            return tipoContrato;
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return Conversor.TipoContratoServicoParaBus(client.DetalhesContrato(id));
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         [OperationBehavior]
         public List<TipoContrato> TodosContratos()
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.TipoContratoModel> ListContratoDAO = DAO.TipoContrato.TodosContratos();
             List<TipoContrato> listContrato = new List<TipoContrato>();
             foreach (var item in ListContratoDAO)
@@ -253,6 +255,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool CadastrarDistribuidora(Distribuidora _Distribuidora)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.DistribuidoraModel _DistribuidoraDAO = new DAO.Models.DistribuidoraModel();
             _DistribuidoraDAO.DistribuidoraID = _Distribuidora.DistribuidoraID;
             _DistribuidoraDAO.Nome = _Distribuidora.Nome;
@@ -271,6 +285,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public Distribuidora DetalhesDistribuidora(int id)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.DistribuidoraModel _DistribuidoraDAO = DAO.Distribuidora.DetalhesDistribuidora(id);
             Distribuidora distribuidora = new Distribuidora();
             distribuidora.DistribuidoraID = _DistribuidoraDAO.DistribuidoraID;
@@ -283,6 +309,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public List<Distribuidora> TodasDistribuidoras()
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.DistribuidoraModel> ListDistribuidoraDAO = DAO.Distribuidora.TodasDistribuidoras();
             List<Distribuidora> listDistribuidora = new List<Distribuidora>();
             foreach (var item in ListDistribuidoraDAO)
@@ -299,6 +337,18 @@ namespace TEE_BUS
 
         public bool CadastrarSubGrupo(TipoSubGrupo _SubGrupo)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.TipoSubGrupoModel _SubGrupoDAO = new DAO.Models.TipoSubGrupoModel();
             _SubGrupoDAO.TipoSubGrupoID = _SubGrupo.TipoSubGrupoID;
             _SubGrupoDAO.TipoSubGrupoString = _SubGrupo.TipoSubGrupoString;
@@ -315,6 +365,18 @@ namespace TEE_BUS
 
         public TipoSubGrupo DetalhesSubGrupo(int id)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.TipoSubGrupoModel _SubGrupoDAO = DAO.TipoSubGrupo.DetalhesSubGrupo(id);
             TipoSubGrupo SubGrupo = new TipoSubGrupo();
             SubGrupo.TipoSubGrupoID = _SubGrupoDAO.TipoSubGrupoID;
@@ -325,6 +387,18 @@ namespace TEE_BUS
 
         public List<TipoSubGrupo> TodosSubGrupos()
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.TipoSubGrupoModel> ListSubGrupoDAO = DAO.TipoSubGrupo.TodosSubGrupos();
             List<TipoSubGrupo> ListSubGrupo = new List<TipoSubGrupo>();
             foreach (var item in ListSubGrupoDAO)
@@ -341,6 +415,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool CadastrarTarifa(Tarifa _Tarifa)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
             tarifaDAO.DistribuidoraID = _Tarifa.DistribuidoraID;
             tarifaDAO.TipoContratoID = _Tarifa.TipoContratoID;
@@ -370,6 +456,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public Tarifa DestalhesDaTarifa(int id)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.TarifaModel _TarifaDAO = DAO.Tarifa.DestalhesDaTarifa(id);
             Tarifa tarifa = new Tarifa();
             tarifa.TarifaID = _TarifaDAO.TarifaID;
@@ -395,6 +493,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public List<Tarifa> TodasTarifas()
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.TarifaModel> ListTarifaDAO = DAO.Tarifa.TodasTarifas();
             List<Tarifa> listaTarifas = new List<Tarifa>();
             foreach (var item in ListTarifaDAO)
@@ -423,6 +533,17 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool AtualizarTarifa(Tarifa _Tarifa)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
             DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
             tarifaDAO.TarifaID = _Tarifa.TarifaID;
@@ -454,6 +575,18 @@ namespace TEE_BUS
         [OperationBehavior]
         public bool DeletarTarifa(Tarifa _Tarifa)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
             tarifaDAO.DistribuidoraID = _Tarifa.DistribuidoraID;
             tarifaDAO.TipoContratoID = _Tarifa.TipoContratoID;
@@ -484,6 +617,18 @@ namespace TEE_BUS
 
         public bool CadastrarUsuario(Usuario _Usuario)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
             usuarioDAO.Email = _Usuario.Email;
             usuarioDAO.ClienteID = _Usuario.ClienteID;
@@ -507,6 +652,18 @@ namespace TEE_BUS
 
         public Usuario VerificaAutenticacao(string email, string senha)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.UsuarioModel _UsuarioDAO = DAO.Usuario.VerificaAutenticacao(email);
 
             if (_UsuarioDAO != null)
@@ -539,6 +696,18 @@ namespace TEE_BUS
 
         public Usuario DestalhesDoUsuario(string email)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.UsuarioModel _UsuarioDAO = DAO.Usuario.DestalhesDoUsuario(email);
             Usuario usuario = new Usuario();
             usuario.Email = _UsuarioDAO.Email;
@@ -555,6 +724,18 @@ namespace TEE_BUS
 
         public bool AtualizarUsuario(Usuario _Usuario)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
             usuarioDAO.Email = _Usuario.Email;
             usuarioDAO.ClienteID = _Usuario.ClienteID;
@@ -578,6 +759,18 @@ namespace TEE_BUS
 
         public bool DeletarUsuario(Usuario _Usuario)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
             usuarioDAO.Email = _Usuario.Email;
             usuarioDAO.ClienteID = _Usuario.ClienteID;
@@ -601,6 +794,17 @@ namespace TEE_BUS
 
         public List<Usuario> ListarUsuarios(int ID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
             List<DAO.Models.UsuarioModel> ListUsuarioModel = DAO.Usuario.TodosUsuarios(ID);
             List<Usuario> ListaUsuarios = new List<Usuario>();
@@ -624,6 +828,18 @@ namespace TEE_BUS
         //----------------------------Conta------------------------------------------------------------
         public bool CadastrarConta(Conta _Conta)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
             ContaDAO.dataReferencia = _Conta.dataReferencia;
             ContaDAO.TarifaID = _Conta.TarifaID;
@@ -680,6 +896,18 @@ namespace TEE_BUS
 
         public Conta DestalhesDaConta(DateTime dataReferencia, int FabricaID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.ContaModel _ContaDAO = DAO.Conta.DestalhesDaConta(dataReferencia, FabricaID);
             Conta conta = new Conta();
 
@@ -731,6 +959,18 @@ namespace TEE_BUS
 
         public List<Conta> TodasContas(int FabricaID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.ContaModel> ListContaDAO = DAO.Conta.TodasContas(FabricaID);
             List<Conta> listaContas = new List<Conta>();
             foreach (var item in ListContaDAO)
@@ -787,6 +1027,18 @@ namespace TEE_BUS
 
         public List<Conta> ConsultaEntreDatas(DateTime dataReferencia1, DateTime dataReferencia2, int FabricaID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.ContaModel> ListContaDAO = DAO.Conta.ConsultaEntreDatas(dataReferencia1, dataReferencia2, FabricaID);
             List<Conta> listaContas = new List<Conta>();
             foreach (var item in ListContaDAO)
@@ -843,6 +1095,18 @@ namespace TEE_BUS
 
         public bool AtualizarConta(Conta _Conta)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
             ContaDAO.dataReferencia = _Conta.dataReferencia;
             ContaDAO.TarifaID = _Conta.TarifaID;
@@ -899,6 +1163,18 @@ namespace TEE_BUS
 
         public bool DeletarConta(Conta _Conta)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
             ContaDAO.dataReferencia = _Conta.dataReferencia;
             ContaDAO.TarifaID = _Conta.TarifaID;
@@ -957,6 +1233,17 @@ namespace TEE_BUS
 
         public bool GerarSimulacao(int fabricaID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
 
             if (DAO.Simulacao.GerarSimulacao(fabricaID))
             {
@@ -972,6 +1259,18 @@ namespace TEE_BUS
 
         public List<Grafico> DadosParaGrafico(int FabricaID)
         {
+            try
+            {
+                using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
+                {
+                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
             List<DAO.Models.GraficoModel> ListGraficoDAO = DAO.Grafico.DadosParaGrafico(FabricaID);
             List<Grafico> listaGrafico = new List<Grafico>();
             foreach (var item in ListGraficoDAO)
