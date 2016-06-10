@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -264,21 +264,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.DistribuidoraServicoParaBus(client.DetalhesDistribuidora(id));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            DAO.Models.DistribuidoraModel _DistribuidoraDAO = DAO.Distribuidora.DetalhesDistribuidora(id);
-            Distribuidora distribuidora = new Distribuidora();
-            distribuidora.DistribuidoraID = _DistribuidoraDAO.DistribuidoraID;
-            distribuidora.Nome = _DistribuidoraDAO.Nome;
-            distribuidora.Cnpj = _DistribuidoraDAO.Cnpj;
-
-            return distribuidora;
         }
 
         [OperationBehavior]
@@ -288,25 +280,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.DistribuidoraListaServicoParaBus(client.TodasDistribuidoras().ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.DistribuidoraModel> ListDistribuidoraDAO = DAO.Distribuidora.TodasDistribuidoras();
-            List<Distribuidora> listDistribuidora = new List<Distribuidora>();
-            foreach (var item in ListDistribuidoraDAO)
-            {
-                Distribuidora distribuidora = new Distribuidora();
-                distribuidora.DistribuidoraID = item.DistribuidoraID;
-                distribuidora.Nome = item.Nome;
-                distribuidora.Cnpj = item.Cnpj;
-                listDistribuidora.Add(distribuidora);
-            }
-            return listDistribuidora;
         }
         //----------------------------Tipo de SubGrupo-----------------------------------------------------
 
@@ -316,23 +296,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.CadastrarSubGrupo(Conversor.TipoSubGrupoBusParaServico(_SubGrupo));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.TipoSubGrupoModel _SubGrupoDAO = new DAO.Models.TipoSubGrupoModel();
-            _SubGrupoDAO.TipoSubGrupoID = _SubGrupo.TipoSubGrupoID;
-            _SubGrupoDAO.TipoSubGrupoString = _SubGrupo.TipoSubGrupoString;
-
-            if (DAO.TipoSubGrupo.CadastrarSubGrupo(_SubGrupoDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -344,20 +311,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.TipoSubGrupoServicoParaBus(client.DetalhesSubGrupo(id));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            DAO.Models.TipoSubGrupoModel _SubGrupoDAO = DAO.TipoSubGrupo.DetalhesSubGrupo(id);
-            TipoSubGrupo SubGrupo = new TipoSubGrupo();
-            SubGrupo.TipoSubGrupoID = _SubGrupoDAO.TipoSubGrupoID;
-            SubGrupo.TipoSubGrupoString = _SubGrupoDAO.TipoSubGrupoString;
-
-            return SubGrupo;
         }
 
         public List<TipoSubGrupo> TodosSubGrupos()
@@ -366,24 +326,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.TipoSubGrupoListaServicoParaBus(client.TodosSubGrupos().ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.TipoSubGrupoModel> ListSubGrupoDAO = DAO.TipoSubGrupo.TodosSubGrupos();
-            List<TipoSubGrupo> ListSubGrupo = new List<TipoSubGrupo>();
-            foreach (var item in ListSubGrupoDAO)
-            {
-                TipoSubGrupo SubGrupo = new TipoSubGrupo();
-                SubGrupo.TipoSubGrupoID = item.TipoSubGrupoID;
-                SubGrupo.TipoSubGrupoString = item.TipoSubGrupoString;
-                ListSubGrupo.Add(SubGrupo);
-            }
-            return ListSubGrupo;
         }
 
         //----------------------------Tarifa------------------------------------------------------------
@@ -394,35 +343,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.CadastrarTarifa(Conversor.TarifaBusParaServico(_Tarifa));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
-            tarifaDAO.DistribuidoraID = _Tarifa.DistribuidoraID;
-            tarifaDAO.TipoContratoID = _Tarifa.TipoContratoID;
-            tarifaDAO.TipoSubGrupoID = _Tarifa.TipoSubGrupoID;
-            tarifaDAO.DataReferencia = _Tarifa.DataReferencia;
-            tarifaDAO.PotenciaMin = _Tarifa.PotenciaMin;
-            tarifaDAO.PotenciaMax = _Tarifa.PotenciaMax;
-            tarifaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Tarifa.ConsumoNaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Tarifa.ConsumoForaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoNaPontaTE_TarifaPreco = _Tarifa.ConsumoNaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTE_TarifaPreco = _Tarifa.ConsumoForaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            tarifaDAO.DemandaTUSD_TarifaPreco = _Tarifa.DemandaTUSD_TarifaPreco;
-            tarifaDAO.BandeiraID = _Tarifa.BandeiraID;
-
-            if (DAO.Tarifa.CadastrarTarifa(tarifaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -435,34 +359,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.TarifaServicoParaBus(client.DestalhesDaTarifa(id));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            DAO.Models.TarifaModel _TarifaDAO = DAO.Tarifa.DestalhesDaTarifa(id);
-            Tarifa tarifa = new Tarifa();
-            tarifa.TarifaID = _TarifaDAO.TarifaID;
-            tarifa.DistribuidoraID = _TarifaDAO.DistribuidoraID;
-            tarifa.TipoContratoID = _TarifaDAO.TipoContratoID;
-            tarifa.TipoSubGrupoID = _TarifaDAO.TipoSubGrupoID;
-            tarifa.DataReferencia = _TarifaDAO.DataReferencia;
-            tarifa.PotenciaMin = _TarifaDAO.PotenciaMin;
-            tarifa.PotenciaMax = _TarifaDAO.PotenciaMax;
-            tarifa.ConsumoNaPontaTUSD_TarifaPreco = _TarifaDAO.ConsumoNaPontaTUSD_TarifaPreco;
-            tarifa.ConsumoForaPontaTUSD_TarifaPreco = _TarifaDAO.ConsumoForaPontaTUSD_TarifaPreco;
-            tarifa.ConsumoNaPontaTE_TarifaPreco = _TarifaDAO.ConsumoNaPontaTE_TarifaPreco;
-            tarifa.ConsumoForaPontaTE_TarifaPreco = _TarifaDAO.ConsumoForaPontaTE_TarifaPreco;
-            tarifa.ConsumoUltrapassagemNaPonta_TarifaPreco = _TarifaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            tarifa.ConsumoUltrapassagemForaPonta_TarifaPreco = _TarifaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            tarifa.DemandaTUSD_TarifaPreco = _TarifaDAO.DemandaTUSD_TarifaPreco;
-            tarifa.BandeiraID = _TarifaDAO.BandeiraID;
-
-
-            return tarifa;
         }
 
         [OperationBehavior]
@@ -472,37 +375,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.TarifaListaServicoParaBus(client.TodasTarifas().ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.TarifaModel> ListTarifaDAO = DAO.Tarifa.TodasTarifas();
-            List<Tarifa> listaTarifas = new List<Tarifa>();
-            foreach (var item in ListTarifaDAO)
-            {
-                Tarifa tarifa = new Tarifa();
-                tarifa.TarifaID = item.TarifaID;
-                tarifa.DistribuidoraID = item.DistribuidoraID;
-                tarifa.TipoContratoID = item.TipoContratoID;
-                tarifa.TipoSubGrupoID = item.TipoSubGrupoID;
-                tarifa.DataReferencia = item.DataReferencia;
-                tarifa.PotenciaMin = item.PotenciaMin;
-                tarifa.PotenciaMax = item.PotenciaMax;
-                tarifa.ConsumoNaPontaTUSD_TarifaPreco = item.ConsumoNaPontaTUSD_TarifaPreco;
-                tarifa.ConsumoForaPontaTUSD_TarifaPreco = item.ConsumoForaPontaTUSD_TarifaPreco;
-                tarifa.ConsumoNaPontaTE_TarifaPreco = item.ConsumoNaPontaTE_TarifaPreco;
-                tarifa.ConsumoForaPontaTE_TarifaPreco = item.ConsumoForaPontaTE_TarifaPreco;
-                tarifa.ConsumoUltrapassagemNaPonta_TarifaPreco = item.ConsumoUltrapassagemNaPonta_TarifaPreco;
-                tarifa.ConsumoUltrapassagemForaPonta_TarifaPreco = item.ConsumoUltrapassagemForaPonta_TarifaPreco;
-                tarifa.DemandaTUSD_TarifaPreco = item.DemandaTUSD_TarifaPreco;
-                tarifa.BandeiraID = item.BandeiraID;
-                listaTarifas.Add(tarifa);
-            }
-            return listaTarifas;
         }
 
         [OperationBehavior]
@@ -512,36 +391,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.AtualizarTarifa(Conversor.TarifaBusParaServico(_Tarifa));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
-            tarifaDAO.TarifaID = _Tarifa.TarifaID;
-            tarifaDAO.DistribuidoraID = _Tarifa.DistribuidoraID;
-            tarifaDAO.TipoContratoID = _Tarifa.TipoContratoID;
-            tarifaDAO.TipoSubGrupoID = _Tarifa.TipoSubGrupoID;
-            tarifaDAO.DataReferencia = _Tarifa.DataReferencia;
-            tarifaDAO.PotenciaMin = _Tarifa.PotenciaMin;
-            tarifaDAO.PotenciaMax = _Tarifa.PotenciaMax;
-            tarifaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Tarifa.ConsumoNaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Tarifa.ConsumoForaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoNaPontaTE_TarifaPreco = _Tarifa.ConsumoNaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTE_TarifaPreco = _Tarifa.ConsumoForaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            tarifaDAO.DemandaTUSD_TarifaPreco = _Tarifa.DemandaTUSD_TarifaPreco;
-            tarifaDAO.BandeiraID = _Tarifa.BandeiraID;
-
-            if (DAO.Tarifa.AtualizarTarifa(tarifaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -554,35 +407,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.DeletarTarifa(Conversor.TarifaBusParaServico(_Tarifa));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.TarifaModel tarifaDAO = new DAO.Models.TarifaModel();
-            tarifaDAO.DistribuidoraID = _Tarifa.DistribuidoraID;
-            tarifaDAO.TipoContratoID = _Tarifa.TipoContratoID;
-            tarifaDAO.TipoSubGrupoID = _Tarifa.TipoSubGrupoID;
-            tarifaDAO.DataReferencia = _Tarifa.DataReferencia;
-            tarifaDAO.PotenciaMin = _Tarifa.PotenciaMin;
-            tarifaDAO.PotenciaMax = _Tarifa.PotenciaMax;
-            tarifaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Tarifa.ConsumoNaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Tarifa.ConsumoForaPontaTUSD_TarifaPreco;
-            tarifaDAO.ConsumoNaPontaTE_TarifaPreco = _Tarifa.ConsumoNaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoForaPontaTE_TarifaPreco = _Tarifa.ConsumoForaPontaTE_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            tarifaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Tarifa.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            tarifaDAO.DemandaTUSD_TarifaPreco = _Tarifa.DemandaTUSD_TarifaPreco;
-            tarifaDAO.BandeiraID = _Tarifa.BandeiraID;
-
-            if (DAO.Tarifa.DeletarTarifa(tarifaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -596,30 +424,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.CadastrarUsuario(Conversor.UsuarioBusParaServico(_Usuario));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
-            usuarioDAO.Email = _Usuario.Email;
-            usuarioDAO.ClienteID = _Usuario.ClienteID;
-            usuarioDAO.Cpf = _Usuario.Cpf;
-            usuarioDAO.Nome = _Usuario.Nome;
-            usuarioDAO.Senha = _Usuario.Senha;
-            usuarioDAO.Ativo = _Usuario.Ativo;
-            usuarioDAO.DataRegistro = _Usuario.DataRegistro;
-            usuarioDAO.Tipo = _Usuario.Tipo;
-
-
-            if (DAO.Usuario.CadastrarUsuario(usuarioDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -631,39 +439,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.UsuarioServicoParaBus(client.VerificaAutenticacao(email, senha));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.UsuarioModel _UsuarioDAO = DAO.Usuario.VerificaAutenticacao(email);
-
-            if (_UsuarioDAO != null)
-            {
-                Usuario usuario = new Usuario();
-                usuario.Email = _UsuarioDAO.Email;
-                usuario.ClienteID = _UsuarioDAO.ClienteID;
-                usuario.Cpf = _UsuarioDAO.Cpf;
-                usuario.Nome = _UsuarioDAO.Nome;
-                usuario.Senha = _UsuarioDAO.Senha;
-                usuario.Ativo = _UsuarioDAO.Ativo;
-                usuario.DataRegistro = _UsuarioDAO.DataRegistro;
-                usuario.Tipo = _UsuarioDAO.Tipo;
-
-                if (senha == usuario.Senha)
-                {
-                    return usuario;
-                }
-                else
-                {
-
-                    return null;
-                }
-            }
-            else
             {
                 return null;
             }
@@ -675,26 +454,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.UsuarioServicoParaBus(client.DestalhesDoUsuario(email));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            DAO.Models.UsuarioModel _UsuarioDAO = DAO.Usuario.DestalhesDoUsuario(email);
-            Usuario usuario = new Usuario();
-            usuario.Email = _UsuarioDAO.Email;
-            usuario.ClienteID = _UsuarioDAO.ClienteID;
-            usuario.Cpf = _UsuarioDAO.Cpf;
-            usuario.Nome = _UsuarioDAO.Nome;
-            usuario.Senha = _UsuarioDAO.Senha;
-            usuario.Ativo = _UsuarioDAO.Ativo;
-            usuario.DataRegistro = _UsuarioDAO.DataRegistro;
-            usuario.Tipo = _UsuarioDAO.Tipo;
-
-            return usuario;
         }
 
         public bool AtualizarUsuario(Usuario _Usuario)
@@ -703,30 +469,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.AtualizarUsuario(Conversor.UsuarioBusParaServico(_Usuario));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
-            usuarioDAO.Email = _Usuario.Email;
-            usuarioDAO.ClienteID = _Usuario.ClienteID;
-            usuarioDAO.Cpf = _Usuario.Cpf;
-            usuarioDAO.Nome = _Usuario.Nome;
-            usuarioDAO.Senha = _Usuario.Senha;
-            usuarioDAO.Ativo = _Usuario.Ativo;
-            usuarioDAO.DataRegistro = _Usuario.DataRegistro;
-            usuarioDAO.Tipo = _Usuario.Tipo;
-
-
-            if (DAO.Usuario.AtualizarUsuario(usuarioDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -738,30 +484,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.DeletarUsuario(Conversor.UsuarioBusParaServico(_Usuario));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.UsuarioModel usuarioDAO = new DAO.Models.UsuarioModel();
-            usuarioDAO.Email = _Usuario.Email;
-            usuarioDAO.ClienteID = _Usuario.ClienteID;
-            usuarioDAO.Cpf = _Usuario.Cpf;
-            usuarioDAO.Nome = _Usuario.Nome;
-            usuarioDAO.Senha = _Usuario.Senha;
-            usuarioDAO.Ativo = _Usuario.Ativo;
-            usuarioDAO.DataRegistro = _Usuario.DataRegistro;
-            usuarioDAO.Tipo = _Usuario.Tipo;
-
-
-            if (DAO.Usuario.DeletarUsuario(usuarioDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -773,30 +499,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.UsuarioListaServicoParaBus(client.ListarUsuarios(ID).ToList());
                 }
             }
             catch (Exception ex)
             {
                 return false;
             }
-
-            List<DAO.Models.UsuarioModel> ListUsuarioModel = DAO.Usuario.TodosUsuarios(ID);
-            List<Usuario> ListaUsuarios = new List<Usuario>();
-            foreach (var item in ListUsuarioModel)
-            {
-                Usuario usuario = new Usuario();
-                usuario.Email = item.Email;
-                usuario.ClienteID = item.ClienteID;
-                usuario.Cpf = item.Cpf;
-                usuario.Nome = item.Nome;
-                usuario.Senha = item.Senha;
-                usuario.Ativo = item.Ativo;
-                usuario.DataRegistro = item.DataRegistro;
-                usuario.Tipo = item.Tipo;
-                ListaUsuarios.Add(usuario);
-            }
-            return ListaUsuarios;
         }
 
 
@@ -807,63 +516,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.CadastrarConta(Conversor.ContaBusParaServico(_Conta));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
-            ContaDAO.dataReferencia = _Conta.dataReferencia;
-            ContaDAO.TarifaID = _Conta.TarifaID;
-            ContaDAO.FabricaID = _Conta.FabricaID;
-            ContaDAO.DistribuidoraID = _Conta.DistribuidoraID;
-            ContaDAO.TipoContratoID = _Conta.TipoContratoID;
-            ContaDAO.TipoSubGrupoID = _Conta.TipoSubGrupoID;
-            ContaDAO.ConsumoNaPontaTUSD_Registrado = _Conta.ConsumoNaPontaTUSD_Registrado;
-            ContaDAO.ConsumoForaPontaTUSD_Registrado = _Conta.ConsumoForaPontaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTE_Registrado = _Conta.ConsumoNaPontaTE_Registrado;
-            ContaDAO.ConsumoForaPontaTE_Registrado = _Conta.ConsumoForaPontaTE_Registrado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Registrado = _Conta.ConsumoUltrapassagemNaPonta_Registrado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Registrado = _Conta.ConsumoUltrapassagemForaPonta_Registrado;
-            ContaDAO.DemandaTUSD_Registrado = _Conta.DemandaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTUSD_Contratado = _Conta.ConsumoNaPontaTUSD_Contratado;
-            ContaDAO.ConsumoForaPontaTUSD_Contratado = _Conta.ConsumoForaPontaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTE_Contratado = _Conta.ConsumoNaPontaTE_Contratado;
-            ContaDAO.ConsumoForaPontaTE_Contratado = _Conta.ConsumoForaPontaTE_Contratado;
-            ContaDAO.DemandaTUSD_Contratado = _Conta.DemandaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTUSD_Faturado = _Conta.ConsumoNaPontaTUSD_Faturado;
-            ContaDAO.ConsumoForaPontaTUSD_Faturado = _Conta.ConsumoForaPontaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTE_Faturado = _Conta.ConsumoNaPontaTE_Faturado;
-            ContaDAO.ConsumoForaPontaTE_Faturado = _Conta.ConsumoForaPontaTE_Faturado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Faturado = _Conta.ConsumoUltrapassagemNaPonta_Faturado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Faturado = _Conta.ConsumoUltrapassagemForaPonta_Faturado;
-            ContaDAO.DemandaTUSD_Faturado = _Conta.DemandaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Conta.ConsumoNaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Conta.ConsumoForaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTE_TarifaPreco = _Conta.ConsumoNaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTE_TarifaPreco = _Conta.ConsumoForaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            ContaDAO.DemandaTUSD_TarifaPreco = _Conta.DemandaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTUSD_Valor = _Conta.ConsumoNaPontaTUSD_Valor;
-            ContaDAO.ConsumoForaPontaTUSD_Valor = _Conta.ConsumoForaPontaTUSD_Valor;
-            ContaDAO.ConsumoNaPontaTE_Valor = _Conta.ConsumoNaPontaTE_Valor;
-            ContaDAO.ConsumoForaPontaTE_Valor = _Conta.ConsumoForaPontaTE_Valor;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Valor = _Conta.ConsumoUltrapassagemNaPonta_Valor;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Valor = _Conta.ConsumoUltrapassagemForaPonta_Valor;
-            ContaDAO.DemandaTUSD_Valor = _Conta.DemandaTUSD_Valor;
-            ContaDAO.SubTotal = _Conta.SubTotal;
-            ContaDAO.ValorTotal = _Conta.ValorTotal;
-            ContaDAO.BandeiraID = _Conta.BandeiraID;
-
-            if (DAO.Conta.CadastrarConta(ContaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -875,61 +531,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.ContaServicoParaBus(client.DestalhesDaConta(dataReferencia, FabricaID));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            DAO.Models.ContaModel _ContaDAO = DAO.Conta.DestalhesDaConta(dataReferencia, FabricaID);
-            Conta conta = new Conta();
-
-            conta.dataReferencia = _ContaDAO.dataReferencia;
-            conta.TarifaID = _ContaDAO.TarifaID;
-            conta.FabricaID = _ContaDAO.FabricaID;
-            conta.DistribuidoraID = _ContaDAO.DistribuidoraID;
-            conta.TipoContratoID = _ContaDAO.TipoContratoID;
-            conta.TipoSubGrupoID = _ContaDAO.TipoSubGrupoID;
-            conta.ConsumoNaPontaTUSD_Registrado = _ContaDAO.ConsumoNaPontaTUSD_Registrado;
-            conta.ConsumoForaPontaTUSD_Registrado = _ContaDAO.ConsumoForaPontaTUSD_Registrado;
-            conta.ConsumoNaPontaTE_Registrado = _ContaDAO.ConsumoNaPontaTE_Registrado;
-            conta.ConsumoForaPontaTE_Registrado = _ContaDAO.ConsumoForaPontaTE_Registrado;
-            conta.ConsumoUltrapassagemNaPonta_Registrado = _ContaDAO.ConsumoUltrapassagemNaPonta_Registrado;
-            conta.ConsumoUltrapassagemForaPonta_Registrado = _ContaDAO.ConsumoUltrapassagemForaPonta_Registrado;
-            conta.DemandaTUSD_Registrado = _ContaDAO.DemandaTUSD_Registrado;
-            conta.ConsumoNaPontaTUSD_Contratado = _ContaDAO.ConsumoNaPontaTUSD_Contratado;
-            conta.ConsumoForaPontaTUSD_Contratado = _ContaDAO.ConsumoForaPontaTUSD_Contratado;
-            conta.ConsumoNaPontaTE_Contratado = _ContaDAO.ConsumoNaPontaTE_Contratado;
-            conta.ConsumoForaPontaTE_Contratado = _ContaDAO.ConsumoForaPontaTE_Contratado;
-            conta.DemandaTUSD_Contratado = _ContaDAO.DemandaTUSD_Contratado;
-            conta.ConsumoNaPontaTUSD_Faturado = _ContaDAO.ConsumoNaPontaTUSD_Faturado;
-            conta.ConsumoForaPontaTUSD_Faturado = _ContaDAO.ConsumoForaPontaTUSD_Faturado;
-            conta.ConsumoNaPontaTE_Faturado = _ContaDAO.ConsumoNaPontaTE_Faturado;
-            conta.ConsumoForaPontaTE_Faturado = _ContaDAO.ConsumoForaPontaTE_Faturado;
-            conta.ConsumoUltrapassagemNaPonta_Faturado = _ContaDAO.ConsumoUltrapassagemNaPonta_Faturado;
-            conta.ConsumoUltrapassagemForaPonta_Faturado = _ContaDAO.ConsumoUltrapassagemForaPonta_Faturado;
-            conta.DemandaTUSD_Faturado = _ContaDAO.DemandaTUSD_Faturado;
-            conta.ConsumoNaPontaTUSD_TarifaPreco = _ContaDAO.ConsumoNaPontaTUSD_TarifaPreco;
-            conta.ConsumoForaPontaTUSD_TarifaPreco = _ContaDAO.ConsumoForaPontaTUSD_TarifaPreco;
-            conta.ConsumoNaPontaTE_TarifaPreco = _ContaDAO.ConsumoNaPontaTE_TarifaPreco;
-            conta.ConsumoForaPontaTE_TarifaPreco = _ContaDAO.ConsumoForaPontaTE_TarifaPreco;
-            conta.ConsumoUltrapassagemNaPonta_TarifaPreco = _ContaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            conta.ConsumoUltrapassagemForaPonta_TarifaPreco = _ContaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            conta.DemandaTUSD_TarifaPreco = _ContaDAO.DemandaTUSD_TarifaPreco;
-            conta.ConsumoNaPontaTUSD_Valor = _ContaDAO.ConsumoNaPontaTUSD_Valor;
-            conta.ConsumoForaPontaTUSD_Valor = _ContaDAO.ConsumoForaPontaTUSD_Valor;
-            conta.ConsumoNaPontaTE_Valor = _ContaDAO.ConsumoNaPontaTE_Valor;
-            conta.ConsumoForaPontaTE_Valor = _ContaDAO.ConsumoForaPontaTE_Valor;
-            conta.ConsumoUltrapassagemNaPonta_Valor = _ContaDAO.ConsumoUltrapassagemNaPonta_Valor;
-            conta.ConsumoUltrapassagemForaPonta_Valor = _ContaDAO.ConsumoUltrapassagemForaPonta_Valor;
-            conta.DemandaTUSD_Valor = _ContaDAO.DemandaTUSD_Valor;
-            conta.SubTotal = _ContaDAO.SubTotal;
-            conta.ValorTotal = _ContaDAO.ValorTotal;
-            conta.BandeiraID = _ContaDAO.BandeiraID;
-
-            return conta;
         }
 
         public List<Conta> TodasContas(int FabricaID)
@@ -938,66 +546,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.ContaListaServicoParaBus(client.TodasContas(FabricaID).ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.ContaModel> ListContaDAO = DAO.Conta.TodasContas(FabricaID);
-            List<Conta> listaContas = new List<Conta>();
-            foreach (var item in ListContaDAO)
-            {
-                Conta conta = new Conta();
-
-                conta.dataReferencia = item.dataReferencia;
-                conta.TarifaID = item.TarifaID;
-                conta.FabricaID = item.FabricaID;
-                conta.DistribuidoraID = item.DistribuidoraID;
-                conta.TipoContratoID = item.TipoContratoID;
-                conta.TipoSubGrupoID = item.TipoSubGrupoID;
-                conta.ConsumoNaPontaTUSD_Registrado = item.ConsumoNaPontaTUSD_Registrado;
-                conta.ConsumoForaPontaTUSD_Registrado = item.ConsumoForaPontaTUSD_Registrado;
-                conta.ConsumoNaPontaTE_Registrado = item.ConsumoNaPontaTE_Registrado;
-                conta.ConsumoForaPontaTE_Registrado = item.ConsumoForaPontaTE_Registrado;
-                conta.ConsumoUltrapassagemNaPonta_Registrado = item.ConsumoUltrapassagemNaPonta_Registrado;
-                conta.ConsumoUltrapassagemForaPonta_Registrado = item.ConsumoUltrapassagemForaPonta_Registrado;
-                conta.DemandaTUSD_Registrado = item.DemandaTUSD_Registrado;
-                conta.ConsumoNaPontaTUSD_Contratado = item.ConsumoNaPontaTUSD_Contratado;
-                conta.ConsumoForaPontaTUSD_Contratado = item.ConsumoForaPontaTUSD_Contratado;
-                conta.ConsumoNaPontaTE_Contratado = item.ConsumoNaPontaTE_Contratado;
-                conta.ConsumoForaPontaTE_Contratado = item.ConsumoForaPontaTE_Contratado;
-                conta.DemandaTUSD_Contratado = item.DemandaTUSD_Contratado;
-                conta.ConsumoNaPontaTUSD_Faturado = item.ConsumoNaPontaTUSD_Faturado;
-                conta.ConsumoForaPontaTUSD_Faturado = item.ConsumoForaPontaTUSD_Faturado;
-                conta.ConsumoNaPontaTE_Faturado = item.ConsumoNaPontaTE_Faturado;
-                conta.ConsumoForaPontaTE_Faturado = item.ConsumoForaPontaTE_Faturado;
-                conta.ConsumoUltrapassagemNaPonta_Faturado = item.ConsumoUltrapassagemNaPonta_Faturado;
-                conta.ConsumoUltrapassagemForaPonta_Faturado = item.ConsumoUltrapassagemForaPonta_Faturado;
-                conta.DemandaTUSD_Faturado = item.DemandaTUSD_Faturado;
-                conta.ConsumoNaPontaTUSD_TarifaPreco = item.ConsumoNaPontaTUSD_TarifaPreco;
-                conta.ConsumoForaPontaTUSD_TarifaPreco = item.ConsumoForaPontaTUSD_TarifaPreco;
-                conta.ConsumoNaPontaTE_TarifaPreco = item.ConsumoNaPontaTE_TarifaPreco;
-                conta.ConsumoForaPontaTE_TarifaPreco = item.ConsumoForaPontaTE_TarifaPreco;
-                conta.ConsumoUltrapassagemNaPonta_TarifaPreco = item.ConsumoUltrapassagemNaPonta_TarifaPreco;
-                conta.ConsumoUltrapassagemForaPonta_TarifaPreco = item.ConsumoUltrapassagemForaPonta_TarifaPreco;
-                conta.DemandaTUSD_TarifaPreco = item.DemandaTUSD_TarifaPreco;
-                conta.ConsumoNaPontaTUSD_Valor = item.ConsumoNaPontaTUSD_Valor;
-                conta.ConsumoForaPontaTUSD_Valor = item.ConsumoForaPontaTUSD_Valor;
-                conta.ConsumoNaPontaTE_Valor = item.ConsumoNaPontaTE_Valor;
-                conta.ConsumoForaPontaTE_Valor = item.ConsumoForaPontaTE_Valor;
-                conta.ConsumoUltrapassagemNaPonta_Valor = item.ConsumoUltrapassagemNaPonta_Valor;
-                conta.ConsumoUltrapassagemForaPonta_Valor = item.ConsumoUltrapassagemForaPonta_Valor;
-                conta.DemandaTUSD_Valor = item.DemandaTUSD_Valor;
-                conta.SubTotal = item.SubTotal;
-                conta.ValorTotal = item.ValorTotal;
-                conta.BandeiraID = item.BandeiraID;
-
-                listaContas.Add(conta);
-            }
-            return listaContas;
         }
 
         public List<Conta> ConsultaEntreDatas(DateTime dataReferencia1, DateTime dataReferencia2, int FabricaID)
@@ -1006,66 +561,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.ContaListaServicoParaBus(client.ConsultaEntreDatas(dataReferencia1, dataReferencia2, FabricaID).ToList());
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.ContaModel> ListContaDAO = DAO.Conta.ConsultaEntreDatas(dataReferencia1, dataReferencia2, FabricaID);
-            List<Conta> listaContas = new List<Conta>();
-            foreach (var item in ListContaDAO)
-            {
-                Conta conta = new Conta();
-
-                conta.dataReferencia = item.dataReferencia;
-                conta.TarifaID = item.TarifaID;
-                conta.FabricaID = item.FabricaID;
-                conta.DistribuidoraID = item.DistribuidoraID;
-                conta.TipoContratoID = item.TipoContratoID;
-                conta.TipoSubGrupoID = item.TipoSubGrupoID;
-                conta.ConsumoNaPontaTUSD_Registrado = item.ConsumoNaPontaTUSD_Registrado;
-                conta.ConsumoForaPontaTUSD_Registrado = item.ConsumoForaPontaTUSD_Registrado;
-                conta.ConsumoNaPontaTE_Registrado = item.ConsumoNaPontaTE_Registrado;
-                conta.ConsumoForaPontaTE_Registrado = item.ConsumoForaPontaTE_Registrado;
-                conta.ConsumoUltrapassagemNaPonta_Registrado = item.ConsumoUltrapassagemNaPonta_Registrado;
-                conta.ConsumoUltrapassagemForaPonta_Registrado = item.ConsumoUltrapassagemForaPonta_Registrado;
-                conta.DemandaTUSD_Registrado = item.DemandaTUSD_Registrado;
-                conta.ConsumoNaPontaTUSD_Contratado = item.ConsumoNaPontaTUSD_Contratado;
-                conta.ConsumoForaPontaTUSD_Contratado = item.ConsumoForaPontaTUSD_Contratado;
-                conta.ConsumoNaPontaTE_Contratado = item.ConsumoNaPontaTE_Contratado;
-                conta.ConsumoForaPontaTE_Contratado = item.ConsumoForaPontaTE_Contratado;
-                conta.DemandaTUSD_Contratado = item.DemandaTUSD_Contratado;
-                conta.ConsumoNaPontaTUSD_Faturado = item.ConsumoNaPontaTUSD_Faturado;
-                conta.ConsumoForaPontaTUSD_Faturado = item.ConsumoForaPontaTUSD_Faturado;
-                conta.ConsumoNaPontaTE_Faturado = item.ConsumoNaPontaTE_Faturado;
-                conta.ConsumoForaPontaTE_Faturado = item.ConsumoForaPontaTE_Faturado;
-                conta.ConsumoUltrapassagemNaPonta_Faturado = item.ConsumoUltrapassagemNaPonta_Faturado;
-                conta.ConsumoUltrapassagemForaPonta_Faturado = item.ConsumoUltrapassagemForaPonta_Faturado;
-                conta.DemandaTUSD_Faturado = item.DemandaTUSD_Faturado;
-                conta.ConsumoNaPontaTUSD_TarifaPreco = item.ConsumoNaPontaTUSD_TarifaPreco;
-                conta.ConsumoForaPontaTUSD_TarifaPreco = item.ConsumoForaPontaTUSD_TarifaPreco;
-                conta.ConsumoNaPontaTE_TarifaPreco = item.ConsumoNaPontaTE_TarifaPreco;
-                conta.ConsumoForaPontaTE_TarifaPreco = item.ConsumoForaPontaTE_TarifaPreco;
-                conta.ConsumoUltrapassagemNaPonta_TarifaPreco = item.ConsumoUltrapassagemNaPonta_TarifaPreco;
-                conta.ConsumoUltrapassagemForaPonta_TarifaPreco = item.ConsumoUltrapassagemForaPonta_TarifaPreco;
-                conta.DemandaTUSD_TarifaPreco = item.DemandaTUSD_TarifaPreco;
-                conta.ConsumoNaPontaTUSD_Valor = item.ConsumoNaPontaTUSD_Valor;
-                conta.ConsumoForaPontaTUSD_Valor = item.ConsumoForaPontaTUSD_Valor;
-                conta.ConsumoNaPontaTE_Valor = item.ConsumoNaPontaTE_Valor;
-                conta.ConsumoForaPontaTE_Valor = item.ConsumoForaPontaTE_Valor;
-                conta.ConsumoUltrapassagemNaPonta_Valor = item.ConsumoUltrapassagemNaPonta_Valor;
-                conta.ConsumoUltrapassagemForaPonta_Valor = item.ConsumoUltrapassagemForaPonta_Valor;
-                conta.DemandaTUSD_Valor = item.DemandaTUSD_Valor;
-                conta.SubTotal = item.SubTotal;
-                conta.ValorTotal = item.ValorTotal;
-                conta.BandeiraID = item.BandeiraID;
-
-                listaContas.Add(conta);
-            }
-            return listaContas;
         }
 
         public bool AtualizarConta(Conta _Conta)
@@ -1074,63 +576,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.AtualizarConta(Conversor.ContaBusParaServico(_Conta));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
-            ContaDAO.dataReferencia = _Conta.dataReferencia;
-            ContaDAO.TarifaID = _Conta.TarifaID;
-            ContaDAO.FabricaID = _Conta.FabricaID;
-            ContaDAO.DistribuidoraID = _Conta.DistribuidoraID;
-            ContaDAO.TipoContratoID = _Conta.TipoContratoID;
-            ContaDAO.TipoSubGrupoID = _Conta.TipoSubGrupoID;
-            ContaDAO.ConsumoNaPontaTUSD_Registrado = _Conta.ConsumoNaPontaTUSD_Registrado;
-            ContaDAO.ConsumoForaPontaTUSD_Registrado = _Conta.ConsumoForaPontaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTE_Registrado = _Conta.ConsumoNaPontaTE_Registrado;
-            ContaDAO.ConsumoForaPontaTE_Registrado = _Conta.ConsumoForaPontaTE_Registrado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Registrado = _Conta.ConsumoUltrapassagemNaPonta_Registrado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Registrado = _Conta.ConsumoUltrapassagemForaPonta_Registrado;
-            ContaDAO.DemandaTUSD_Registrado = _Conta.DemandaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTUSD_Contratado = _Conta.ConsumoNaPontaTUSD_Contratado;
-            ContaDAO.ConsumoForaPontaTUSD_Contratado = _Conta.ConsumoForaPontaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTE_Contratado = _Conta.ConsumoNaPontaTE_Contratado;
-            ContaDAO.ConsumoForaPontaTE_Contratado = _Conta.ConsumoForaPontaTE_Contratado;
-            ContaDAO.DemandaTUSD_Contratado = _Conta.DemandaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTUSD_Faturado = _Conta.ConsumoNaPontaTUSD_Faturado;
-            ContaDAO.ConsumoForaPontaTUSD_Faturado = _Conta.ConsumoForaPontaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTE_Faturado = _Conta.ConsumoNaPontaTE_Faturado;
-            ContaDAO.ConsumoForaPontaTE_Faturado = _Conta.ConsumoForaPontaTE_Faturado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Faturado = _Conta.ConsumoUltrapassagemNaPonta_Faturado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Faturado = _Conta.ConsumoUltrapassagemForaPonta_Faturado;
-            ContaDAO.DemandaTUSD_Faturado = _Conta.DemandaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Conta.ConsumoNaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Conta.ConsumoForaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTE_TarifaPreco = _Conta.ConsumoNaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTE_TarifaPreco = _Conta.ConsumoForaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            ContaDAO.DemandaTUSD_TarifaPreco = _Conta.DemandaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTUSD_Valor = _Conta.ConsumoNaPontaTUSD_Valor;
-            ContaDAO.ConsumoForaPontaTUSD_Valor = _Conta.ConsumoForaPontaTUSD_Valor;
-            ContaDAO.ConsumoNaPontaTE_Valor = _Conta.ConsumoNaPontaTE_Valor;
-            ContaDAO.ConsumoForaPontaTE_Valor = _Conta.ConsumoForaPontaTE_Valor;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Valor = _Conta.ConsumoUltrapassagemNaPonta_Valor;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Valor = _Conta.ConsumoUltrapassagemForaPonta_Valor;
-            ContaDAO.DemandaTUSD_Valor = _Conta.DemandaTUSD_Valor;
-            ContaDAO.SubTotal = _Conta.SubTotal;
-            ContaDAO.ValorTotal = _Conta.ValorTotal;
-            ContaDAO.BandeiraID = _Conta.BandeiraID;
-
-            if (DAO.Conta.AtualizarConta(ContaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -1142,63 +591,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.DeletarConta(Conversor.ContaBusParaServico(_Conta));
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            DAO.Models.ContaModel ContaDAO = new DAO.Models.ContaModel();
-            ContaDAO.dataReferencia = _Conta.dataReferencia;
-            ContaDAO.TarifaID = _Conta.TarifaID;
-            ContaDAO.FabricaID = _Conta.FabricaID;
-            ContaDAO.DistribuidoraID = _Conta.DistribuidoraID;
-            ContaDAO.TipoContratoID = _Conta.TipoContratoID;
-            ContaDAO.TipoSubGrupoID = _Conta.TipoSubGrupoID;
-            ContaDAO.ConsumoNaPontaTUSD_Registrado = _Conta.ConsumoNaPontaTUSD_Registrado;
-            ContaDAO.ConsumoForaPontaTUSD_Registrado = _Conta.ConsumoForaPontaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTE_Registrado = _Conta.ConsumoNaPontaTE_Registrado;
-            ContaDAO.ConsumoForaPontaTE_Registrado = _Conta.ConsumoForaPontaTE_Registrado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Registrado = _Conta.ConsumoUltrapassagemNaPonta_Registrado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Registrado = _Conta.ConsumoUltrapassagemForaPonta_Registrado;
-            ContaDAO.DemandaTUSD_Registrado = _Conta.DemandaTUSD_Registrado;
-            ContaDAO.ConsumoNaPontaTUSD_Contratado = _Conta.ConsumoNaPontaTUSD_Contratado;
-            ContaDAO.ConsumoForaPontaTUSD_Contratado = _Conta.ConsumoForaPontaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTE_Contratado = _Conta.ConsumoNaPontaTE_Contratado;
-            ContaDAO.ConsumoForaPontaTE_Contratado = _Conta.ConsumoForaPontaTE_Contratado;
-            ContaDAO.DemandaTUSD_Contratado = _Conta.DemandaTUSD_Contratado;
-            ContaDAO.ConsumoNaPontaTUSD_Faturado = _Conta.ConsumoNaPontaTUSD_Faturado;
-            ContaDAO.ConsumoForaPontaTUSD_Faturado = _Conta.ConsumoForaPontaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTE_Faturado = _Conta.ConsumoNaPontaTE_Faturado;
-            ContaDAO.ConsumoForaPontaTE_Faturado = _Conta.ConsumoForaPontaTE_Faturado;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Faturado = _Conta.ConsumoUltrapassagemNaPonta_Faturado;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Faturado = _Conta.ConsumoUltrapassagemForaPonta_Faturado;
-            ContaDAO.DemandaTUSD_Faturado = _Conta.DemandaTUSD_Faturado;
-            ContaDAO.ConsumoNaPontaTUSD_TarifaPreco = _Conta.ConsumoNaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTUSD_TarifaPreco = _Conta.ConsumoForaPontaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTE_TarifaPreco = _Conta.ConsumoNaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoForaPontaTE_TarifaPreco = _Conta.ConsumoForaPontaTE_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemNaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemNaPonta_TarifaPreco;
-            ContaDAO.ConsumoUltrapassagemForaPonta_TarifaPreco = _Conta.ConsumoUltrapassagemForaPonta_TarifaPreco;
-            ContaDAO.DemandaTUSD_TarifaPreco = _Conta.DemandaTUSD_TarifaPreco;
-            ContaDAO.ConsumoNaPontaTUSD_Valor = _Conta.ConsumoNaPontaTUSD_Valor;
-            ContaDAO.ConsumoForaPontaTUSD_Valor = _Conta.ConsumoForaPontaTUSD_Valor;
-            ContaDAO.ConsumoNaPontaTE_Valor = _Conta.ConsumoNaPontaTE_Valor;
-            ContaDAO.ConsumoForaPontaTE_Valor = _Conta.ConsumoForaPontaTE_Valor;
-            ContaDAO.ConsumoUltrapassagemNaPonta_Valor = _Conta.ConsumoUltrapassagemNaPonta_Valor;
-            ContaDAO.ConsumoUltrapassagemForaPonta_Valor = _Conta.ConsumoUltrapassagemForaPonta_Valor;
-            ContaDAO.DemandaTUSD_Valor = _Conta.DemandaTUSD_Valor;
-            ContaDAO.SubTotal = _Conta.SubTotal;
-            ContaDAO.ValorTotal = _Conta.ValorTotal;
-            ContaDAO.BandeiraID = _Conta.BandeiraID;
-
-            if (DAO.Conta.DeletarConta(ContaDAO))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -1212,19 +608,10 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return client.GerarSimulacao(fabricaID);
                 }
             }
             catch (Exception ex)
-            {
-                return false;
-            }
-
-            if (DAO.Simulacao.GerarSimulacao(fabricaID))
-            {
-                return true;
-            }
-            else
             {
                 return false;
             }
@@ -1238,72 +625,13 @@ namespace TEE_BUS
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return client.CadastrarBandeira(Conversor.BandeiraBusParaServico(bandeira));
+                    return Conversor.GraficoListaServicoParaBus(client.DadosParaGrafico(FabricaID));
                 }
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
-
-            List<DAO.Models.GraficoModel> ListGraficoDAO = DAO.Grafico.DadosParaGrafico(FabricaID);
-            List<Grafico> listaGrafico = new List<Grafico>();
-            foreach (var item in ListGraficoDAO)
-            {
-                Grafico grafico = new Grafico();
-
-                grafico.DataDaSimulacao = item.DataDaSimulacao;
-                grafico.DataReferencia = item.DataReferencia;
-                grafico.TarifaOrigemID = item.TarifaOrigemID;
-                grafico.TarifaDestinoID = item.TarifaDestinoID;
-                grafico.FabricaID = item.FabricaID;
-                grafico.DistribuidoraID = item.DistribuidoraID;
-                grafico.TipoContratoID = item.TipoContratoID;
-                grafico.TipoSubGrupoID = item.TipoSubGrupoID;
-                grafico.BandeiraID = item.BandeiraID;
-                grafico.ConsumoNaPontaTUSD_Registrado = item.ConsumoNaPontaTUSD_Registrado;
-                grafico.ConsumoForaPontaTUSD_Registrado = item.ConsumoForaPontaTUSD_Registrado;
-                grafico.ConsumoNaPontaTE_Registrado = item.ConsumoNaPontaTE_Registrado;
-                grafico.ConsumoForaPontaTE_Registrado = item.ConsumoForaPontaTE_Registrado;
-                grafico.ConsumoUltrapassagemNaPonta_Registrado = item.ConsumoUltrapassagemNaPonta_Registrado;
-                grafico.ConsumoUltrapassagemForaPonta_Registrado = item.ConsumoUltrapassagemForaPonta_Registrado;
-                grafico.DemandaTUSD_Registrado = item.DemandaTUSD_Registrado;
-                grafico.ConsumoNaPontaTUSD_Contratado = item.ConsumoNaPontaTUSD_Contratado;
-                grafico.ConsumoForaPontaTUSD_Contratado = item.ConsumoForaPontaTUSD_Contratado;
-                grafico.ConsumoNaPontaTE_Contratado = item.ConsumoNaPontaTE_Contratado;
-                grafico.ConsumoForaPontaTE_Contratado = item.ConsumoForaPontaTE_Contratado;
-                grafico.DemandaTUSD_Contratado = item.DemandaTUSD_Contratado;
-                grafico.ConsumoNaPontaTUSD_Faturado = item.ConsumoNaPontaTUSD_Faturado;
-                grafico.ConsumoForaPontaTUSD_Faturado = item.ConsumoForaPontaTUSD_Faturado;
-                grafico.ConsumoNaPontaTE_Faturado = item.ConsumoNaPontaTE_Faturado;
-                grafico.ConsumoForaPontaTE_Faturado = item.ConsumoForaPontaTE_Faturado;
-                grafico.ConsumoUltrapassagemNaPonta_Faturado = item.ConsumoUltrapassagemNaPonta_Faturado;
-                grafico.ConsumoUltrapassagemForaPonta_Faturado = item.ConsumoUltrapassagemForaPonta_Faturado;
-                grafico.DemandaTUSD_Faturado = item.DemandaTUSD_Faturado;
-                grafico.ConsumoNaPontaTUSD_TarifaPreco = item.ConsumoNaPontaTUSD_TarifaPreco;
-                grafico.ConsumoForaPontaTUSD_TarifaPreco = item.ConsumoForaPontaTUSD_TarifaPreco;
-                grafico.ConsumoNaPontaTE_TarifaPreco = item.ConsumoNaPontaTE_TarifaPreco;
-                grafico.ConsumoForaPontaTE_TarifaPreco = item.ConsumoForaPontaTE_TarifaPreco;
-                grafico.ConsumoUltrapassagemNaPonta_TarifaPreco = item.ConsumoUltrapassagemNaPonta_TarifaPreco;
-                grafico.ConsumoUltrapassagemForaPonta_TarifaPreco = item.ConsumoUltrapassagemForaPonta_TarifaPreco;
-                grafico.DemandaTUSD_TarifaPreco = item.DemandaTUSD_TarifaPreco;
-                grafico.ConsumoNaPontaTUSD_Valor = item.ConsumoNaPontaTUSD_Valor;
-                grafico.ConsumoForaPontaTUSD_Valor = item.ConsumoForaPontaTUSD_Valor;
-                grafico.ConsumoNaPontaTE_Valor = item.ConsumoNaPontaTE_Valor;
-                grafico.ConsumoForaPontaTE_Valor = item.ConsumoForaPontaTE_Valor;
-                grafico.ConsumoUltrapassagemNaPonta_Valor = item.ConsumoUltrapassagemNaPonta_Valor;
-                grafico.ConsumoUltrapassagemForaPonta_Valor = item.ConsumoUltrapassagemForaPonta_Valor;
-                grafico.DemandaTUSD_Valor = item.DemandaTUSD_Valor;
-                grafico.SubTotal = item.SubTotal;
-                grafico.ValorTotal = item.ValorTotal;
-                grafico.TipoContratoDestinoID = item.TipoContratoDestinoID;
-
-                listaGrafico.Add(grafico);
-            }
-            return listaGrafico;
         }
-
-
     }
-
 }
