@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -504,7 +504,7 @@ namespace TEE_BUS
             }
             catch (Exception ex)
             {
-                return false;
+                return null;
             }
         }
 
@@ -619,13 +619,13 @@ namespace TEE_BUS
 
         //----------------------------Grafico--------------------------------------------------------------
 
-        public List<Grafico> DadosParaGrafico(int FabricaID)
+        public List<Grafico> DadosParaGrafico(int FabricaID, int ContratoID)
         {
             try
             {
                 using (TEEService.TEECRUDServiceClient client = new TEEService.TEECRUDServiceClient())
                 {
-                    return Conversor.GraficoListaServicoParaBus(client.DadosParaGrafico(FabricaID));
+                    return Conversor.GraficoListaServicoParaBus(client.DadosParaGrafico(FabricaID, ContratoID).ToList());
                 }
             }
             catch (Exception ex)

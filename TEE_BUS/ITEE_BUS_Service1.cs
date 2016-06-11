@@ -138,6 +138,6 @@ namespace TEE_BUS
 
         //----------------------------Grafico------------------------------------------------------------------
         [OperationContract]
-        List<Grafico> DadosParaGrafico(int FabricaID);
+        List<Grafico> DadosParaGrafico(int FabricaID, int ContratoID);
     }
 }
